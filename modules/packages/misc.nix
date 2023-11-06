@@ -13,7 +13,7 @@ with pkgs;
   plexamp
   tdesktop
   zotero
- #cloudflared
+  cloudflared
   ppp
   openfortivpn
   yt-dlp
