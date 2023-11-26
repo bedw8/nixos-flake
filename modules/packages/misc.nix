@@ -24,6 +24,7 @@ with pkgs;
   config.nur.repos.vanilla.fastfetch
   gephi
   aircrack-ng
+  auto-cpufreq
   #(appimageTools.wrapType2
   #{
   #  # or wrapType1

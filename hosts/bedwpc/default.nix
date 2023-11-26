@@ -61,4 +61,5 @@
 
   services.openssh.enable = true;
   services.upower.enable = true;
+  services.auto-cpufreq.enable = true;
 }
