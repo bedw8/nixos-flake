@@ -25,6 +25,7 @@ with pkgs;
   gephi
   aircrack-ng
   auto-cpufreq
+  cpufrequtils
   #(appimageTools.wrapType2
   #{
   #  # or wrapType1
