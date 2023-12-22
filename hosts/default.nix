@@ -20,6 +20,14 @@ in
     modules = [ 
       nur.nixosModules.nur
       ./bedwpc 
+      ../modules/hidpi.nix
+      ../modules/qt.nix
+      ../modules/bluetooth.nix
+      ../modules/polkit-gkring.nix
+      ../modules/sound.nix
+      ../modules/virt.nix
+      ../modules/sus-the-hib.nix
+      ../modules/keyd
       home-manager.nixosModules.home-manager {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;

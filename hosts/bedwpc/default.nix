@@ -4,15 +4,7 @@
 {
   imports = 
     [(import ./hardware-configuration.nix)] ++
-    [(import ../configuration.nix)] ++
-    [(import ../../modules/hidpi.nix)] ++
-    [(import ../../modules/qt.nix)] ++
-    [(import ../../modules/bluetooth.nix)] ++
-    [(import ../../modules/polkit-gkring.nix)] ++
-    [(import ../../modules/sound.nix)] ++
-    [(import ../../modules/virt.nix)] ++
-    [(import ../../modules/sus-the-hib.nix)] ++
-    (import ../../modules/keyd);
+    [(import ../configuration.nix)];
 
   networking = {
     hostName = "bedwpc"; 
@@ -21,7 +13,6 @@
   # Bootloader.
   boot = {
     loader = {
-     # efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot";
       grub = {
         enable = true;
@@ -44,7 +35,11 @@
     (import ../../modules/packages/tools.nix pkgs) ++
     (import ../../modules/packages/x11tools.nix pkgs) ++
     (import ../../modules/packages/programming.nix pkgs) ++
-    (import ../../modules/packages/misc.nix {pkgs=pkgs ; config=config;});
+    (import ../../modules/packages/misc.nix {
+      inherit pkgs;
+      inherit config;
+      }
+    );
   };
 
 

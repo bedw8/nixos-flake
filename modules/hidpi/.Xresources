@@ -49,3 +49,4 @@ Xcursor.size:  32
 XTerm*renderFont: true
 XTerm*faceName: Ubuntu Mono
 XTerm*faceSize: 32
+URxvt*font: xft:Ubuntu Mono:size=15
