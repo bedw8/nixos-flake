@@ -38,6 +38,11 @@
     modules = with pkgs; [ xf86_input_wacom ];
     layout = "us";
     xkbVariant = "altgr-intl";
+    videoDrivers = [ "intel" ];
+    deviceSection = ''
+      Option "DRI" "2"
+      Option "TearFree" "true"
+    '';
 
     windowManager = {
       dwm.enable = true;
@@ -64,13 +69,14 @@
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+    config.common.default = "*";
   };
 
   services.gvfs.enable = true;
 
   services.avahi = {
     enable = true;
-    nssmdns = true;
+    nssmdns4 = true;
   };
 
   services.flatpak.enable = true;
@@ -93,10 +99,11 @@
     allowUnfreePredicate = (_: true);
     permittedInsecurePackages = [
       "plexamp"
-      "electron-21.4.0"
+      "electron-25.9.0"
       "imagemagick-6.9.12-68"
       "zotero-6.0.27"
     ];
+    zathura = {useMupdf = false;};
   };
 
   environment = {

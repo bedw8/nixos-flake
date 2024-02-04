@@ -13,6 +13,7 @@ with pkgs;
   cairo
   graphviz
   gephi
+  julia
   #sageWithDoc
   #python311Packages.graph-tool
   (python3.withPackages (ps: with ps; [
@@ -22,6 +23,7 @@ with pkgs;
     seaborn
     tkinter
     matplotlib.override {enableQt = true;}
+    xlib
     requests
     beautifulsoup4
     typer

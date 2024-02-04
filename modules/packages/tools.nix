@@ -10,6 +10,7 @@ with pkgs;
   appimage-run
   unrar
   unzip
+  zip
   unar
   ffmpeg
   wirelesstools

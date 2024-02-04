@@ -11,6 +11,7 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "i915" ];
   boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelParams = [ "i915.enable_psr=0" ];
   boot.extraModulePackages = [ ];
   boot.devShmSize = "100%";
 

@@ -21,10 +21,10 @@
   xsession.enable=true;
 
   gtk.enable = true;
-  nixpkgs.config = {
-    allowUnfree = true;
-    allowUnfreePredicate = (_: true);
-  };
+  #nixpkgs.config = {
+  #  allowUnfree = true;
+  #  allowUnfreePredicate = (_: true);
+  #};
 
   #programs.zsh.enable = true;
   programs.home-manager.enable = true;
