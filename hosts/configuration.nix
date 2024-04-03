@@ -36,13 +36,16 @@
   services.xserver = {
     enable = true;
     modules = with pkgs; [ xf86_input_wacom ];
-    layout = "us";
-    xkbVariant = "altgr-intl";
     videoDrivers = [ "intel" ];
     deviceSection = ''
       Option "DRI" "2"
       Option "TearFree" "true"
     '';
+
+    xkb = {
+      layout = "us";
+      variant = "altgr-intl";
+    };
 
     windowManager = {
       dwm.enable = true;
@@ -79,6 +82,8 @@
     nssmdns4 = true;
   };
 
+  services.unbound.enable = true;
+
   services.flatpak.enable = true;
   services.syncthing = {
     enable = true;
@@ -91,6 +96,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "audio" "input" "camera" "lp" "networkmanager" "flatpak" "docker" ];
     shell = pkgs.zsh;
+    #ignoreShellProgramCheck = true;
   };
 
   # Allow unfree packages
@@ -110,11 +116,14 @@
     variables = {
       VDPAU_DRIVER = "va_gl";
       TERMINAL = "alacritty";
-      EDITOR = "vim";
-      VISUAL = "vim";
+      NIXPKGS_ALLOW_UNFREE = "1";
+      #EDITOR = "vim";
+      #VISUAL = "vim";
     };
     systemPackages = with pkgs; [
       #vim 
+      git
+      gnupg
       wget
       killall
       usbutils
@@ -128,12 +137,16 @@
       xterm
       acpi
       tmux
+      home-manager
     ] ++ [ xorg.libX11 xorg.libXft xorg.libXinerama xorg.libXcursor ];
+
+    etc."channels/nixpkgs".source = inputs.nixpkgs.outPath;
   };
 
   programs = {
     zsh.enable = true;
     dconf.enable = true;
+    nix-ld.enable = true;
     seahorse.enable = true;
     gnupg.agent = {
       enable = true;
@@ -153,19 +166,25 @@
       liberation_ttf
       cantarell-fonts
       freefont_ttf
-      fira-code
       fira-code-symbols
       source-code-pro
-      ubuntu_font_family
       gnome3.adwaita-icon-theme
       google-fonts
       twitter-color-emoji
       #twemoji-color-font
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-cjk-serif
-      noto-fonts-lgc-plus
-      noto-fonts-emoji
+      #noto-fonts
+      #noto-fonts-cjk-sans
+      #noto-fonts-cjk-serif
+      #noto-fonts-lgc-plus
+      #noto-fonts-emoji
+      (nerdfonts.override { fonts = [ 
+        "FiraCode"
+        "DroidSansMono" 
+        "UbuntuMono"
+        "Ubuntu"
+        "Noto"
+      ]; })
+
       #noto-fonts-emoji-blob-bin
       #joypixels
     ];
@@ -184,10 +203,14 @@
   nix = {
     package = pkgs.nixFlakes;
     registry.nixpkgs.flake = inputs.nixpkgs;
-    extraOptions = "experimental-features = nix-command flakes";
-   };
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = ["root" "${user}"];
+    };
+  };
 
   virtualisation.docker.enable = true;
+  hardware.keyboard.qmk.enable = true;
 
   nixpkgs.overlays = with pkgs; [
     (final: prev: {
