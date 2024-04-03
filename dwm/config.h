@@ -151,6 +151,7 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
 	RULE(.class = "Alacritty", .isterminal = 1)
 	RULE(.class = "floatingWindow", .isfloating = 1, .noswallow=1)
+	RULE(.class = "pdfpc", .isfloating = 1, .noswallow=1)
 	RULE(.class = "Plexamp", .tags = 1 << 3, .isfloating =1)
 	RULE(.title = "Event Tester", .noswallow = 1)
 	RULE(.title = "noSwallow", .noswallow = 1)
