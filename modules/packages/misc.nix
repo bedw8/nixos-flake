@@ -21,7 +21,7 @@ with pkgs;
   rmview
   remarkable-mouse
   pdfpc
-  config.nur.repos.vanilla.fastfetch
+  fastfetch
   gephi
   aircrack-ng
   auto-cpufreq

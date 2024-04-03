@@ -39,6 +39,8 @@ with pkgs;
     pygraphviz
     pygobject3
     ipympl
+    pynvim
+    pyperclip
  #   graph-tool
     ]))
 ]

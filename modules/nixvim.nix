@@ -1,20 +1,24 @@
 {config, pkgs, user, ...}:
 {
+  #xdg.configFile."nvim.snippets".source = config.lib.file.mkOutOfStoreSymlink "/home/bedw/Documents/nixos/flake/modules/neovim";
+
   programs.nixvim = {
     enable = true;
     colorscheme = "molokai";
     viAlias = true;
 
+    #luaLoader.enable = true;
     defaultEditor = true;
     globals.mapleader = " ";
-    globals.maplocalleader = " ";
-    #globals.UltiSnipsSnippetDirectories = ["UltiSnips"];
-    #globals.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit="/home/${user}/.config/nvim/UltiSnips";
+    #globals.maplocalleader = " ";
+    globals.loaded_python_provider = false;
+    #globals.python3_host_prog = "${pkgs.python3.withPackages (ps: with ps; [ pynvim ] )}/bin/python3";
+    globals.python3_host_prog = "/run/current-system/sw/bin/python3";
 
     path = "nvim";
-    clipboard = {
-      register = "unnamedplus";
-    };
+    #clipboard = {
+    #  register = "unnamedplus";
+    #};
 
     options = {
       mouse = "i";
@@ -85,10 +89,13 @@
       { mode = "v"; key = "<"; action = "<gv"; }
       { mode = "v"; key = "<TAB>"; action = ">gv"; }
       { mode = "v"; key = "<S-TAB>"; action = "<gv"; }
+      { mode = "v"; key = "="; action = "=gv"; }
 
       # spell
       { mode = "i"; key = "<C-l>"; action = "<c-g>u<Esc>[s1z=`]a<c-g>u"; }
 
+      # fix "x" key
+      { mode = "v"; key = "x"; action = "d"; }
     ];
 
     autoCmd = [
@@ -137,7 +144,7 @@
       treesitter = {
         enable = true;
         nixvimInjections = true;
-
+        disabledLanguages = [ "latex" "tex" ];
         folding = false;
         indent = true;
       };
@@ -145,6 +152,7 @@
       hmts.enable = false;
       telescope = {
         enable = true;
+        defaults.layout_config.horizontal.preview_cutoff = 0; 
         keymaps = {
           "<leader>ff" = "find_files";
           "<leader>fg" = "live_grep";
@@ -160,49 +168,73 @@
         keymapsSilent = true;
 
         defaults = {
-		  file_ignore_patterns = [
-			"^.git/"
-			"^__pycache__/"
-			"^output/"
-			"^data/"
-			"%.ipynb"
-		  ];
-		  set_env.COLORTERM = "truecolor";
-		};
+          file_ignore_patterns = [
+            "^.git/"
+            "^__pycache__/"
+            "^output/"
+            "^data/"
+            "%.ipynb"
+          ];
+          set_env.COLORTERM = "truecolor";
+        };
       };
 
-      luasnip.enable = true;
-      nvim-cmp = {
+      luasnip = {
+        enable = true;
+        extraConfig = {
+          enable_autosnippets = true;
+          updateevents = "TextChanged,TextChangedI";
+        };
+        fromLua = [ 
+          {
+            paths.__raw =  "\"/home/bedw/Documents/nixos/flake/modules/neovim/snippets\"";
+          } 
+        ];
+      };
+      cmp = {
         enable = true;
         autoEnableSources = true;
-        snippet.expand = "ultisnips";
+        settings = {
+          snippet.expand = "function(args) require('luasnip').lsp_expand(args.body) end";
+          
+          mapping = {
+            "<C-d>" = "cmp.mapping.scroll_docs(-4)";
+            "<C-f>" = "cmp.mapping.scroll_docs(4)";
+            "<C-Space>" = "cmp.mapping.complete()";
+            "<C-e>" = "cmp.mapping.close()";
+            "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+            "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<S-CR>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })";
+          };
 
-        mapping = {
-          "<C-d>" = "cmp.mapping.scroll_docs(-4)";
-          "<C-f>" = "cmp.mapping.scroll_docs(4)";
-          "<C-Space>" = "cmp.mapping.complete()";
-          "<C-e>" = "cmp.mapping.close()";
-          "<Tab>" = {
-            modes = ["i" "s"];
-            action = "cmp.mapping.select_next_item()";
+          performance = {
+            debounce = 60;
+            fetchingTimeout = 200;
+            maxViewEntries = 10;
           };
-          "<S-Tab>" = {
-            modes = ["i" "s"];
-            action = "cmp.mapping.select_prev_item()";
-          };
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
-        };
-        performance = {
-          debounce = 60;
-          fetchingTimeout = 200;
-          maxViewEntries = 10;
-        };
+          formatting.fields = ["kind" "abbr" "menu"];
+
         sources = [
-          { name = "path";}
           { name = "nvim_lsp";}
-          { name = "ultisnips"; }
           { name = "vimtex"; }
+          { name = "emoji";}
+          {
+            name = "buffer"; # text within current buffer
+            option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
+            keywordLength = 3;
+          }
+          { name = "path"; keywordLength = 3; }
+          { name = "luasnip"; keywordLength = 3; }
         ];
+        window = {
+          completion = {
+            border = "rounded";
+            winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None";
+          };
+          documentation = {border = "rounded";};
+        };
+        };
       };
       
       harpoon = {
@@ -302,23 +334,51 @@
       };
 
       # oil.enable;
+      cmp-latex-symbols.enable = true;
+      cmp-nvim-lsp = {enable = true;}; # lsp
+      cmp-buffer = {enable = true;};
+      cmp-path = {enable = true;}; # file system paths
+      cmp_luasnip = {enable = true;}; # snippets
+
       vim-slime.enable = true;
       undotree.enable = true;
       nix.enable = true;
-      cmp-latex-symbols.enable = true;
-      cmp-nvim-ultisnips.enable = true;
       surround.enable = true;
 
-      comment-nvim.enable = true;
+      comment.enable = true;
       leap.enable = true;
-
+      julia-cell.enable = true;
+      gitsigns.enable = true;
     };
 
 
+
     extraPlugins = with pkgs.vimPlugins; [
-      ultisnips
       molokai
+      telescope-lsp-handlers-nvim
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "snippet-converter.nvim";
+        src = pkgs.fetchFromGitHub {
+          owner = "smjonas";
+          repo = "snippet-converter.nvim";
+          rev= "d7e783618f02541641980ebd823e439bdef64a4f";
+          hash = "sha256-l6d+0VPpGozfl5eoQBwuqwKzca61TzF/SH12EPw0Ths=";
+        };
+      })
     ];
+    extraConfigLua = ''
+      local cmp = require("cmp")
+
+      cmp.setup.filetype('julia', {
+        sources = cmp.config.sources({
+          {name = 'cmp-latex-symbols'},
+        })
+      })
+
+      require('telescope').load_extension('lsp_handlers')
+
+    '';
+
     extraConfigVim = ''
       hi MatchParen gui=bold guibg=NONE guifg=orange
       hi SpellBad cterm=bold,underline gui=underline,bold guibg=NONE guifg=#FF5733
@@ -326,10 +386,6 @@
       hi LineNr guibg=black
       hi SignColumn guibg=black
       hi clear Conceal
-
     '';
   };
-
-  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "/home/bedw/Documents/nixos/flake/modules/neovim";
-
 }

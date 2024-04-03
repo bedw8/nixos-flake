@@ -5,6 +5,7 @@ with pkgs;
   #ripgrep-all
   playerctl
   fd
+  bat
   gnome.zenity
   gnome.vinagre
   appimage-run
