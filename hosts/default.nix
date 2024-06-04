@@ -33,6 +33,7 @@ in
       ../modules/sound.nix
       ../modules/virt.nix
       ../modules/sus-the-hib.nix
+      ../modules/ur.nix
       ../modules/keyd
     ];
   };

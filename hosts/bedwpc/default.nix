@@ -50,8 +50,11 @@
     extraPackages = with pkgs; [ 
       vaapiIntel
       libvdpau-va-gl
-      intel-media-driver
+      mesa_drivers
+      mesa
     ];
+    driSupport = true;
+    driSupport32Bit = true;
   };
 
   services.openssh.enable = true;

@@ -1,4 +1,5 @@
 # Edit this configuration file to define what should be installed on
+
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
@@ -117,8 +118,8 @@
       VDPAU_DRIVER = "va_gl";
       TERMINAL = "alacritty";
       NIXPKGS_ALLOW_UNFREE = "1";
-      #EDITOR = "vim";
-      #VISUAL = "vim";
+      EDITOR = lib.mkForce "vim";
+      VISUAL = lib.mkForce "vim";
     };
     systemPackages = with pkgs; [
       #vim 
@@ -222,7 +223,16 @@
     (self: super: {
       fcitx-engines = fcitx5;
     })
+    #(self: super:
+    #  let
+    #    nixpkgs-mesa = builtins.fetchTarball {
+    #      url = https://github.com/nixos/nixpkgs/archive/bdac777becdbb8780c35be4f552c9d4518fe0bdb.tar.gz;
+    #      sha256 = "18hi3cgagzkrxrwv6d9yjazqg5q2kiacjn3hhb94j4gs6c6kdxrk";};
+    #  in { mesa_drivers = (import nixpkgs-mesa { inherit system; }).mesa_drivers; })
   ];
+
+#  hardware.opengl.package = pkgs.mesa_drivers;
+
 
   system.stateVersion = "22.11"; 
 

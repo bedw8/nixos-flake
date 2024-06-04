@@ -1,5 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysysm.h>
+
 /* appearance */
 static const unsigned int borderpx       = 1;   /* border pixel of windows */
 static const unsigned int snap           = 32;  /* snap pixel */
@@ -7,7 +9,7 @@ static const int swallowfloating         = 0;   /* 1 means swallow floating wind
 static const char autostartblocksh[]     = "autostart_blocking.sh";
 static const char autostartsh[]          = "autostart.sh";
 static const char dwmdir[]               = "dwm";
-static const char localshare[]           = ".local/share";
+static const char localshare[]           = ".local";
 static const int showbar                 = 1;   /* 0 means no bar */
 static const int topbar                  = 1;   /* 0 means bottom bar */
 static const int bar_height              = 0;   /* 0 means derive from font, >= 1 explicit height */
@@ -20,8 +22,8 @@ static const int showsystray             = 1;   /* 0 means no systray */
 static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
 static int tiledindicatortype            = INDICATOR_NONE;
 static int floatindicatortype            = INDICATOR_TOP_LEFT_SQUARE;
-static const char *fonts[]               = { "monospace:size=10" };
-static const char dmenufont[]            = "monospace:size=10";
+static const char *fonts[]               = { "Ubuntu Mono:size=10" };
+static const char dmenufont[]            = "Ubuntu Mono:size=10";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
@@ -147,11 +149,15 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
-	RULE(.class = "Gimp", .tags = 1 << 4)
-	RULE(.class = "Firefox", .tags = 1 << 7)
+	RULE(.class = "Alacritty", .isterminal = 1)
+	RULE(.class = "floatingWindow", .isfloating = 1, .noswallow=1)
+	RULE(.class = "Plexamp", .tags = 1 << 3, .isfloating =1)
+	RULE(.class = "Pdfpc", .isfloating = 1)
+	RULE(.title = "pdfpc - presenter", .isfloating = 0, .monitor=2)
+	RULE(.title = "pdfpc - presentation", .isfloating = 0, .monitor=1)
+	RULE(.title = "Event Tester", .noswallow = 1)
+	RULE(.title = "noSwallow", .noswallow = 1)
 };
-
-
 
 /* Bar rules allow you to configure what is shown where on the bar, as well as
  * introducing your own bar modules.
@@ -178,7 +184,7 @@ static const BarRule barrules[] = {
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const int lockfullscreen = 1; /* 1 will force focus on thefullscreen window */
 
 
 
@@ -193,7 +199,7 @@ static const Layout layouts[] = {
 
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -217,25 +223,37 @@ static const char *dmenucmd[] = {
 	"-sf", selfgcolor,
 	NULL
 };
-static const char *termcmd[]  = { "st", NULL };
+
+static const char *roficmd[] = { "rofi", "-show", "drun", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };
+static const char *mutecmd[] = { "amixer", "-q", "sset", "Master", "toggle", NULL };
+static const char *volupcmd[] = { "amixer", "-q", "sset", "Master", "2%+", NULL };
+static const char *voldowncmd[] = { "amixer", "-q", "sset", "Master", "2%-", NULL };
+
+static const char *playpausecmd[] = { "playerctl", "play-pause", NULL };
+static const char *nextcmd[] = { "playerctl", "next", NULL };
+static const char *prevcmd[] = { "playerctl", "previous", NULL };
+
+static const char *brupcmd[] = { "xbacklight", "-inc", "10", NULL };
+static const char *brdowncmd[] = { "xbacklight", "-dec", "10", NULL };
 
 
 
 static Key keys[] = {
 	/* modifier                     key            function                argument */
-	{ MODKEY,                       XK_p,          spawn,                  {.v = dmenucmd } },
+ 	{ MODKEY,                       XK_d,      spawn,          {.v = roficmd } },
 	{ MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
 	{ MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
 	{ MODKEY,                       XK_i,          incnmaster,             {.i = +1 } },
-	{ MODKEY,                       XK_d,          incnmaster,             {.i = -1 } },
+	{ MODKEY,                       XK_u,          incnmaster,             {.i = -1 } },
 	{ MODKEY,                       XK_h,          setmfact,               {.f = -0.05} },
 	{ MODKEY,                       XK_l,          setmfact,               {.f = +0.05} },
 	{ MODKEY,                       XK_Return,     zoom,                   {0} },
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
-	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
-	{ MODKEY|ShiftMask,             XK_q,          quit,                   {0} },
+ 	{ MODKEY|ShiftMask,             XK_q,          killclient,             {0} },
+ 	{ MODKEY|ShiftMask,             XK_e,          quit,                   {0} },	
 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
@@ -251,6 +269,16 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period,     tagmon,                 {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
+	{ MODKEY,                       XK_y,		   togglefullscreen,	   {0} },
+	{ 0,                            XF86XK_AudioMute, spawn,    {.v = mutecmd} },
+    { 0,                            XF86XK_AudioLowerVolume, spawn,    {.v = voldowncmd} },
+    { 0,                            XF86XK_AudioRaiseVolume, spawn,    {.v = volupcmd} },
+    { 0,                            XF86XK_AudioPlay, spawn,    {.v = playpausecmd} },
+    { 0,                            XF86XK_AudioPause, spawn,    {.v = playpausecmd} },
+    { 0,                            XF86XK_AudioNext, spawn,    {.v = nextcmd} },
+    { 0,                            XF86XK_AudioPrev, spawn,    {.v = prevcmd} },
+    { 0,                            XF86XK_MonBrightnessUp, spawn, {.v = brupcmd} },
+    { 0,                            XF86XK_MonBrightnessDown, spawn, {.v = brdowncmd} },
 	TAGKEYS(                        XK_1,                                  0)
 	TAGKEYS(                        XK_2,                                  1)
 	TAGKEYS(                        XK_3,                                  2)

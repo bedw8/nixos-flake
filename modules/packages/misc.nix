@@ -20,7 +20,16 @@ with pkgs;
   xournalpp
   rmview
   remarkable-mouse
-  pdfpc
+  (pdfpc.overrideAttrs (prev: {
+      src = pkgs.fetchFromGitHub {
+        owner = "pdfpc";
+        repo =  "pdfpc";
+        rev = "4b5060fbd46ebfe115665c614dfee3eeaf51fbd0";
+        hash = "sha256-8zuG6Pg4BTYAlSBDbwuvPLG0hj6XREeSwfI2kisKc4M=";
+      };
+      patches = [ ];
+    })
+  )
   fastfetch
   gephi
   aircrack-ng

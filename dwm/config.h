@@ -150,11 +150,13 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
 	RULE(.class = "Alacritty", .isterminal = 1)
-	RULE(.class = "floatingWindow", .isfloating = 1, .noswallow=1)
-	RULE(.class = "Pdfpc", .isfloating = 1, .noswallow=1)
-	RULE(.class = "Plexamp", .tags = 1 << 3, .isfloating =1)
-	RULE(.title = "Event Tester", .noswallow = 1)
-	RULE(.title = "noSwallow", .noswallow = 1)
+ 	RULE(.class = "floatingWindow", .isfloating = 1, .noswallow=1)
+ 	RULE(.class = "Plexamp", .tags = 1 << 3, .isfloating =1)
+ 	RULE(.class = "Pdfpc", .isfloating = 1)
+ 	RULE(.title = "pdfpc - presenter", .isfloating = 0, .monitor=2)
+ 	RULE(.title = "pdfpc - presentation", .isfloating = 0, .monitor=1)
+ 	RULE(.title = "Event Tester", .noswallow = 1)
+ 	RULE(.title = "noSwallow", .noswallow = 1)
 };
 
 
@@ -240,7 +242,7 @@ static const char *brdowncmd[] = { "xbacklight", "-dec", "10", NULL };
 
 static Key keys[] = {
 	/* modifier                     key            function                argument */
-	{ MODKEY,                       XK_d,      spawn,          {.v = roficmd } },
+	{ MODKEY,                       XK_d,          spawn,                  {.v = roficmd } },
 	{ MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
@@ -252,7 +254,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return,     zoom,                   {0} },
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
 	{ MODKEY|ShiftMask,             XK_q,          killclient,             {0} },
-	{ MODKEY|ShiftMask,             XK_e,          quit,                   {0} },
+ 	{ MODKEY|ShiftMask,             XK_e,          quit,                   {0} },
 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
@@ -268,15 +270,16 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period,     tagmon,                 {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
-    { 0,                            XF86XK_AudioMute, spawn,    {.v = mutecmd} },
-    { 0,                            XF86XK_AudioLowerVolume, spawn,    {.v = voldowncmd} },
-    { 0,                            XF86XK_AudioRaiseVolume, spawn,    {.v = volupcmd} },
-    { 0,                            XF86XK_AudioPlay, spawn,    {.v = playpausecmd} },
-    { 0,                            XF86XK_AudioPause, spawn,    {.v = playpausecmd} },
-    { 0,                            XF86XK_AudioNext, spawn,    {.v = nextcmd} },
-    { 0,                            XF86XK_AudioPrev, spawn,    {.v = prevcmd} },
-    { 0,                            XF86XK_MonBrightnessUp, spawn, {.v = brupcmd} },
-    { 0,                            XF86XK_MonBrightnessDown, spawn, {.v = brdowncmd} },
+	{ MODKEY,                       XK_y,		   togglefullscreen,	   {0} },
+	{ 0,                            XF86XK_AudioMute, spawn,    {.v = mutecmd} },
+	{ 0,                            XF86XK_AudioLowerVolume, spawn,    {.v = voldowncmd} },
+	{ 0,                            XF86XK_AudioRaiseVolume, spawn,    {.v = volupcmd} },
+	{ 0,                            XF86XK_AudioPlay, spawn,    {.v = playpausecmd} },
+	{ 0,                            XF86XK_AudioPause, spawn,    {.v = playpausecmd} },
+	{ 0,                            XF86XK_AudioNext, spawn,    {.v = nextcmd} },
+	{ 0,                            XF86XK_AudioPrev, spawn,    {.v = prevcmd} },
+	{ 0,                            XF86XK_MonBrightnessUp, spawn, {.v = brupcmd} },
+	{ 0,                            XF86XK_MonBrightnessDown, spawn, {.v = brdowncmd} },
 	TAGKEYS(                        XK_1,                                  0)
 	TAGKEYS(                        XK_2,                                  1)
 	TAGKEYS(                        XK_3,                                  2)

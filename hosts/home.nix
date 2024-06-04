@@ -25,7 +25,12 @@
 
   programs.zsh = {
     enable = true;
-    initExtra = ''fpath+="${pkgs.script-directory}/share/zsh/site-functions"'';
+    initExtra = ''
+      fpath+="${pkgs.script-directory}/share/zsh/site-functions"
+
+      # Conda fix
+      . ~/.conda/etc/profile.d/conda.sh
+      '';
     defaultKeymap = "emacs";
     oh-my-zsh = let
       pi-themes = pkgs.fetchFromGitHub {
@@ -56,6 +61,7 @@
       "jump"
       "themes"
       "vi-mode"
+      "direnv"
       "common-aliases" ];
     };
     plugins = [

@@ -3,7 +3,7 @@
 { pkgs, ... }:
 with pkgs;
 [
-  texlive.combined.scheme-full
+  #texlive.combined.scheme-medium
   nix-index
   tesseract
   conda
