@@ -9,10 +9,12 @@
     nur.url = github:nix-community/NUR;
     nixvim.url = github:nix-community/nixvim;
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
-
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+    musnix.url = "github:musnix/musnix";
   };
   
-  outputs = { self, nixpkgs, home-manager, nur, nixvim, ... }@inputs: 
+  outputs = { self, nixpkgs, home-manager, nur, nixvim, disko, ... }@inputs: 
   let
     system = "x86_64-linux";
     user = "bedw";
@@ -23,7 +25,7 @@
     nixosConfigurations = (
       import ./hosts {
         inherit (nixpkgs) lib;
-        inherit inputs nixpkgs user system home-manager nur nixvim;
+        inherit inputs nixpkgs user system home-manager nur nixvim disko;
       }
     );
 

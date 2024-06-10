@@ -137,6 +137,7 @@
       xterm
       acpi
       tmux
+      xdg-user-dirs
       home-manager
     ] ++ [ xorg.libX11 xorg.libXft xorg.libXinerama xorg.libXcursor ];
 

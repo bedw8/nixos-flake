@@ -16,6 +16,11 @@
     stateVersion = "22.11";
   };
 
+  xdg = {
+    enable = true;
+    userDirs.createDirectories = true;
+  };
+
 
   gtk.enable = true;
   nixpkgs.config = {
@@ -126,6 +131,12 @@
     enable = true;
     enableZshIntegration = true; 
     nix-direnv.enable = true;
+  };
+
+  programs.brave = {
+    enable = true;
+    commandLineArgs = [ "--force-device-scale-factor=1.5" ];
+    extensions = [ "dbepggeogbaibhgnhhndojpepiihcmeb" ];
   };
 
   #programs.starship = {

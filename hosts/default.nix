@@ -4,6 +4,8 @@ let
   home-manager = inputs.home-manager;
   nur = inputs.nur;
   nixvim = inputs.nixvim;
+  disko = inputs.disko;
+  musnix = inputs.musnix;
 
   pkgs = import nixpkgs {
     inherit system;
@@ -19,6 +21,8 @@ in
     modules = [ 
       nur.nixosModules.nur
       nixvim.nixosModules.nixvim
+      inputs.disko.nixosModules.disko
+      musnix.nixosModules.musnix
       ./bedwpc 
       #home-manager.nixosModules.home-manager {
       #  home-manager.useGlobalPkgs = true;

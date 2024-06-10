@@ -3,8 +3,12 @@
 
 {
   imports = 
-    [(import ./hardware-configuration.nix)] ++
-    [(import ../configuration.nix)];
+    [
+      ./hardware-configuration.nix
+      ../configuration.nix
+      ./disk-config.nix 
+      ../../modules/audio.nix
+    ];
 
   networking = {
     hostName = "bedwpc"; 
@@ -23,7 +27,7 @@
       };
     };
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = [ "resume_offset=18542592" ];
+    kernelParams = [ "resume_offset=8022016" ];
     resumeDevice = "/dev/nvme0n1p4";
     extraModprobeConfig = "options snd-hda-intel model=alc255-acer,dell-headset-multi";
   };

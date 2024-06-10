@@ -17,4 +17,5 @@ with pkgs;
   wirelesstools
   pdf2svg
   desktop-file-utils
+  gh
 ]
