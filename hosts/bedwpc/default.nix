@@ -26,9 +26,9 @@
         devices = [ "nodev" ];
       };
     };
-    kernelPackages = pkgs.linuxPackages_latest;
+    #kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [ "resume_offset=8022016" ];
-    resumeDevice = "/dev/nvme0n1p4";
+    resumeDevice = "/dev/pool/root";
     extraModprobeConfig = "options snd-hda-intel model=alc255-acer,dell-headset-multi";
   };
 
