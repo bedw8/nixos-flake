@@ -19,6 +19,7 @@ with pkgs;
   (python3.withPackages (ps: with ps; [
     numpy
     pandas
+    geopandas
     openpyxl
     seaborn
     tkinter

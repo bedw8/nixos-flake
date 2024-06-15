@@ -3,6 +3,7 @@
 
 {
   musnix.enable = true;
+  musnix.kernel.realtime = true;
   musnix.kernel.packages = pkgs.linuxPackages_latest_rt;
 
   environment.systemPackages = with pkgs; [
@@ -14,6 +15,7 @@
     reaper
     ardour
     tenacity
+    (import ./packages/bitwig.nix)
 
     distrho
     calf
